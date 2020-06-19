@@ -1,0 +1,427 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>My Material design</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<link rel="stylesheet" href="./css/font-awesome.min.css" />
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<link rel="stylesheet" href="./vendor/waves/waves.min.css" />
+		<link rel="stylesheet" href="./vendor/wow/animate.css" />
+		<link rel="stylesheet" href="./css/nativedroid2.css" />
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+		<script src="./vendor/waves/waves.min.js"></script>
+		<script src="./vendor/wow/wow.min.js"></script>
+		<script src="./js/nativedroid2.js"></script>
+		<script src="./nd2settings.js"></script>
+
+		<!-- Javascript for scanning a QR -->
+		<script src="./assets/js/jsQR.js"></script>
+
+		<!-- Javascript for creating a QR -->
+		<script src="./assets/js/easy.qrcode.min.js"></script>
+
+
+		<meta name="mobile-web-app-capable" content="yes">
+	 	<meta name="apple-mobile-web-app-capable" content="yes" />
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+
+		<style>
+    
+			#loadingMessage {
+			  text-align: center;
+			  padding: 40px;
+			  background-color: #eee;
+			}
+		
+			.fit-picture {
+			  width: 30%;
+			}
+
+			#canvas {
+			  width: 100%;
+			}
+	
+			#canvas2 {
+			  width: 100%;
+			}
+	
+			#outputImage {
+			  width: 100%;
+			}
+	
+			#qrcode {
+			  text-align: center;
+			}
+	
+			#qrcodelabel {
+			  text-align: center;
+            }
+
+        /* Breakpoint at 800px */
+        /* Adjusts column proportions, tweaks base H1 */
+        @media all and (min-width: 50em){
+
+            #canvas {
+                width: 40%;
+            }
+            #canvas2 {
+                width: 40%;
+            }
+
+            .fit-picture {
+			  width: 20%;
+			}
+
+        }
+	
+		</style>
+	
+
+	</head>
+	<body class="clr-accent-indigo">
+
+
+<!-- =========================================== -->
+<!-- HOME PAGE -->
+<!-- =========================================== -->
+<div data-role="page" id="home">
+    
+    <div data-role="header" data-position="fixed">
+        <h2>Credentials</h2>
+    </div><!-- /header -->
+    
+    <div role="main" class="ui-content">
+
+        <div class="nd2-card">
+            <a href="#takePicture" class="ui-btn">
+            <h4>Send my Credential</h4>
+            <img src="./assets/img/my-credentials.png" class="fit-picture" alt="My credentials">
+            </a>
+        </div>
+
+    
+
+        <div class="nd2-card">
+            <a href="#scanQR" class="ui-btn">
+            <h4>Verify a Credential</h4>
+            <img src="./assets/img/verify-credential.png" class="fit-picture" alt="My credentials">
+            </a>
+        </div>
+    
+    </div><!-- /content -->
+    
+
+    <div data-role="footer" data-position="fixed">
+
+        <div class="row center-xs">
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#home" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-home zmd-2x'></i> Home</a>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#displayQR" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-camera zmd-2x'></i> Display</a>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#scanQR" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-check-square zmd-2x'></i> Verify</a>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /footer -->
+
+</div><!-- /page -->
+
+<!-- =========================================== -->
+<!-- SCANNER PAGE -->
+<!-- =========================================== -->
+<div data-role="page" id="scanQR">
+    
+    <div data-role="header" data-position="fixed">
+        <h2>Scan QR</h2>
+    </div><!-- /header -->
+    
+    <div role="main" class="ui-content">
+
+        <canvas id="canvas" hidden></canvas>
+        </br>
+        <div id="outputMessage">No QR code detected.</div>
+        <img id="outputImage">
+
+    </div><!-- /content -->
+    
+    <div data-role="footer" data-position="fixed">
+
+        <div class="row center-xs">
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#home" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-home zmd-2x'></i> Home</a>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#displayQR" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-camera zmd-2x'></i> Display</a>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="box">
+                    <a href="#scanQR" class="ui-btn ui-btn-icon-block"><i class='zmdi zmdi-check-square zmd-2x'></i> Verify</a>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /footer -->
+
+</div><!-- /page -->
+
+
+<!-- =========================================== -->
+<!-- QR DISPLAY -->
+<!-- =========================================== -->
+<div data-role="page" id="displayQR" data-dialog="true">
+
+    <div data-role="header" data-position="fixed">
+        <h1>QR generation</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        </br>
+
+        <div id="displayQRDisplay"></div>
+
+        </br>
+        </br>
+
+        <a href="#" data-rel="back" class="ui-btn ui-btn-inline ui-btn-raised clr-primary">Cancel</a>
+        
+    </div><!-- /content -->
+
+</div><!-- /page -->
+
+
+<!-- =========================================== -->
+<!-- SCRIPTS -->
+<!-- =========================================== -->
+<script>
+
+    // ******************************************************
+    // QR Scanning page: Initialize the variables
+    // ******************************************************
+
+    // The HTML element where the video stream is going to be placed
+    var video = ""
+
+    // The HTML element where the video frames will be placed for analysis
+    var canvasElement = document.getElementById("canvas");
+
+    // Get the canvas context with image data
+    var canvas = canvasElement.getContext("2d");
+
+    // The output message with status of scanning
+    var outputMessage = document.getElementById("outputMessage");
+
+    // The result of processing of the QR scan
+    var outputBinary = "";
+
+    // The video stream object
+    var myStream = "";
+
+
+    // Detect if we are in the QR Scan page
+    $( document ).on( "pageshow", "#scanQR", function() {
+
+        // Initialize the scanning
+        initializeScanning();
+
+    });
+
+
+    // Detect if we are in the Display QR page
+    $( document ).on( "pageshow", "#displayQR", function() {
+
+        generateQR();
+
+    });
+
+
+    // Utility function to generate a (very) unique number
+    function generateUID() {
+        // Get the number of milliseconds since midnight Jan 1, 1970
+        n = Date.now();
+        // Get a random number from 1 to 100.000
+        r = Math.floor(Math.random() * 100000)
+        // Combine both as a string, to make it difficult for two users making the request in the same millisecond
+        uid = n.toString() + "-" + r.toString();
+        return uid
+    }
+
+    // Utility function to draw a line in the canvas image
+    function drawLine(begin, end, color) {
+        canvas.beginPath();
+        canvas.moveTo(begin.x, begin.y);
+        canvas.lineTo(end.x, end.y);
+        canvas.lineWidth = 4;
+        canvas.strokeStyle = color;
+        canvas.stroke();
+    }
+
+    function initializeScanning() {
+        // Create the HTML element to place the video stream
+        video = document.createElement("video");
+
+        // Erase the image data
+        document.getElementById("outputImage").src = "";
+
+        // Display message that we are loading the video stream
+        $.mobile.loading( "show", {
+            text: "Loading video...",
+            textVisible: true,
+        });
+
+        // Make sure that the canvas element is hidden for the moment
+        canvasElement.hidden = true;
+
+        // Display a message while we have not detected anything
+        outputMessage.innerText = "Nothing detected .........";
+
+        // Request permission from user to get the video stream
+        // Use "facingMode: environment" to attempt to get the main camera on phones
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            // Store the stream in global variable for later
+            myStream = stream;
+
+            // Connect the video stream to the "video" element in the page
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+            video.play();
+
+            // Call the "tick" function on the next animation interval
+            requestAnimationFrame(tick);
+        });
+
+    }
+
+    // This function is called periodically until we get a result from the scan
+    function tick() {
+
+        // Ckeck if we are running in the context of the QR Scan page
+        currentPageHash = $(".selector").pagecontainer( "getActivePage" ).context.location.hash
+        if (currentPageHash != "#scanQR") {
+            // If we are not in th eQR Scan page, stop the camera
+            stopMediaTracks(myStream);
+            return        
+        }
+
+        // Try to scan the QR code only when video stream is ready
+        if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+            // We are not yet ready
+            // Request to be called again in next frame
+            requestAnimationFrame(tick);
+
+            // Exit from the function
+            return
+        }
+
+        // Video is ready, hide loading message and display canvas element
+        $.mobile.loading( "hide" );
+        canvasElement.hidden = false;
+
+        // Set the canvas size to match the video stream
+        canvasElement.height = video.videoHeight;
+        canvasElement.width = video.videoWidth;
+
+        // Get a video frame and decode an image data using the canvas element
+        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+        var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+        // Try to decode the image as a QR code
+        var code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+        });
+
+        // If unsuccessful, exit requesting to be called again at next animation frame
+        if (!(code)) {
+
+            // Request to be called again in next frame
+            requestAnimationFrame(tick);
+
+            // Exit from the function
+            return
+        }
+
+        // If successful, draw a red square in the image for the detected QR
+        drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+        drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+        drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+        drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+
+        // Hide the video canvas element
+        canvasElement.hidden = true;
+
+        // Save in global variable the decoded data from the QR
+        outputBinary = code.data;
+        // Log to console
+        console.log(code);
+
+        // Display in the page the result of the scan (the URL of the credential)
+        outputMessage.innerText = outputBinary;
+
+        // The content of the QR should be a URL where the real object is stored
+        // Use the URL to get the object from the server
+        $.get( outputBinary, function( data ) {
+            // Log the date returned from the server
+            console.log(data.payload);
+
+            // Diesplay the credential in the outputMessage field
+            outputMessage.innerText = data.payload;
+
+        }, "json" );
+
+        // Stop the media stream
+        stopMediaTracks(myStream);
+
+        return
+    }
+
+    function stopMediaTracks(stream) {
+        // Stop the media stream
+        tracks = stream.getTracks();
+        tracks[0].stop();
+
+        return
+    }
+
+
+    function generateQR() {
+
+        // Get the URL address of this server
+        loc = $.mobile.path.parseLocation();
+
+        // Build the URL to include in the QR
+        credentialURL = loc.domain + "/credentials/" + "123456";
+        credentialURL = "https://www.google.com";
+
+        // Erase the display of the QR
+        qrelement = document.getElementById("displayQRDisplay")
+        qrelement.innerText = ""
+
+        var qrcode = new QRCode(
+            document.getElementById("displayQRDisplay"),
+            { text: credentialURL }
+        );
+    }
+
+
+</script>
+
+
+</body>
+</html>
